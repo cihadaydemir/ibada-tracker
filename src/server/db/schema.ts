@@ -1,9 +1,15 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
+import { create } from "domain";
+import { relations, sql } from "drizzle-orm";
 import {
+  PgColumn,
+  PgTableWithColumns,
   index,
+  integer,
+  pgEnum,
+  pgTable,
   pgTableCreator,
   serial,
   timestamp,
@@ -32,3 +38,52 @@ export const posts = createTable(
     nameIndex: index("name_idx").on(example.name),
   })
 );
+
+export const ibadaTypesEnum = pgEnum("ibada-types",[
+  "PRAYER",
+"FASTING",
+"DJUMA",
+"EID_PRAYER",
+"QURAN"
+])
+
+export const users = pgTable("users",{
+  id: serial("id").primaryKey(),
+    name: varchar("name", { length: 256 }),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+})
+
+
+export const usersRelations = relations(users, ({ many }) => ({
+  ibada: many(ibadas),
+}));
+
+
+export const ibadas = pgTable("ibadas",{
+  id: serial("id").primaryKey(),
+  ibadaType: ibadaTypesEnum('ibada-types').notNull(),
+  createdAt: timestamp("created_at")
+  .default(sql`CURRENT_TIMESTAMP`)
+  .notNull(),
+  userId: serial("user_id").notNull().references(()=> users.id,{ onDelete: "cascade" })
+})
+
+
+export const ibadaRelations = relations(ibadas, ({one})=>({
+  user: one(users,{
+    fields:[ibadas.userId],
+    references:[users.id]
+  })
+}));
+
+export const userScoreRelations = relations(users,({one})=>({
+  score: one(scores)
+}))
+
+export const scores = pgTable("scores",{
+        userId: serial("user_id").notNull().references(()=> users.id,{ onDelete: "cascade" }),
+        score: integer('score')
+
+})
