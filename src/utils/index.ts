@@ -4,7 +4,6 @@ export const nanoid = customAlphabet("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghi
 const prefixes = {
 	user: "usr",
 	ibada: "ibd",
-	
 } as const
 
 export function newId(prefix: keyof typeof prefixes): string {
