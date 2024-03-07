@@ -1,0 +1,1 @@
+ALTER TABLE "prayer_types" RENAME COLUMN "moseque_bonus" TO "mosque_bonus";

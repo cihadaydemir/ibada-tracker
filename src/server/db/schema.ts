@@ -2,7 +2,7 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { relations, sql } from "drizzle-orm"
-import { index, integer, pgEnum, pgTable, pgTableCreator, serial, text, timestamp, varchar } from "drizzle-orm/pg-core"
+import { integer, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
 /**
@@ -12,7 +12,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod"
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 
-export const ibadaTypesEnum = pgEnum("ibada-types", ["PRAYER", "FASTING", "DJUMA", "EID_PRAYER", "QURAN"])
+export const ibadaTypesEnum = pgEnum("ibada-types", ["prayer", "other"])
 
 export const users = pgTable("users", {
 	id: integer("id").primaryKey(),
@@ -26,20 +26,42 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const ibadas = pgTable("ibadas", {
 	id: text("id").primaryKey(),
-	ibadaType: ibadaTypesEnum("ibada-types").notNull(),
+	// ibadaType: ibadaTypesEnum("ibada-types").notNull(),
+	ibadaType: text("ibada_type_id").references(() => ibadaTypes.id),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	userId: integer("user_id")
 		.notNull()
 		.references(() => users.id, { onDelete: "cascade" }),
 })
 
+export type Ibada = typeof ibadas.$inferSelect
+
 export const createIbadasInputSchema = createInsertSchema(ibadas)
 export const selectIbadasSchema = createSelectSchema(ibadas)
+
+export const scores = pgTable("scores", {
+	userId: integer("user_id")
+		.notNull()
+		.references(() => users.id, { onDelete: "cascade" }),
+	score: integer("score").notNull(),
+})
+
+export const ibadaTypes = pgTable("ibada_types", {
+	name: text("name").notNull(),
+	id: text("id").primaryKey(),
+	type: ibadaTypesEnum("type").notNull(),
+	base_reward: integer("base_reward").notNull(),
+	mosque_bonus: integer("mosque_bonus"),
+})
 
 export const ibadaRelations = relations(ibadas, ({ one }) => ({
 	user: one(users, {
 		fields: [ibadas.userId],
 		references: [users.id],
+	}),
+	ibadaType: one(ibadaTypes, {
+		fields: [ibadas.ibadaType],
+		references: [ibadaTypes.id],
 	}),
 }))
 
@@ -47,9 +69,4 @@ export const userScoreRelations = relations(users, ({ one }) => ({
 	scores: one(scores),
 }))
 
-export const scores = pgTable("scores", {
-	userId: integer("user_id")
-		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
-	score: integer("score"),
-})
+export const ibadaTypesSchema = createSelectSchema(ibadaTypes)
