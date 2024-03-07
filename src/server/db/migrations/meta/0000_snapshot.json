@@ -1,167 +1,235 @@
 {
-	"id": "eb1b689e-e0ee-4e07-a9b5-16e3619adb32",
-	"prevId": "00000000-0000-0000-0000-000000000000",
-	"version": "5",
-	"dialect": "pg",
-	"tables": {
-		"ibadas": {
-			"name": "ibadas",
-			"schema": "",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "serial",
-					"primaryKey": false,
-					"notNull": true
-				},
-				"ibada-types": {
-					"name": "ibada-types",
-					"type": "ibada-types",
-					"primaryKey": false,
-					"notNull": true
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "timestamp",
-					"primaryKey": false,
-					"notNull": true,
-					"default": "CURRENT_TIMESTAMP"
-				}
-			},
-			"indexes": {},
-			"foreignKeys": {
-				"ibadas_id_users_id_fk": {
-					"name": "ibadas_id_users_id_fk",
-					"tableFrom": "ibadas",
-					"tableTo": "users",
-					"columnsFrom": ["id"],
-					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
-				}
-			},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {}
-		},
-		"ibada-tracker_post": {
-			"name": "ibada-tracker_post",
-			"schema": "",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "serial",
-					"primaryKey": true,
-					"notNull": true
-				},
-				"name": {
-					"name": "name",
-					"type": "varchar(256)",
-					"primaryKey": false,
-					"notNull": false
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "timestamp",
-					"primaryKey": false,
-					"notNull": true,
-					"default": "CURRENT_TIMESTAMP"
-				},
-				"updatedAt": {
-					"name": "updatedAt",
-					"type": "timestamp",
-					"primaryKey": false,
-					"notNull": false
-				}
-			},
-			"indexes": {
-				"name_idx": {
-					"name": "name_idx",
-					"columns": ["name"],
-					"isUnique": false
-				}
-			},
-			"foreignKeys": {},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {}
-		},
-		"scores": {
-			"name": "scores",
-			"schema": "",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "serial",
-					"primaryKey": false,
-					"notNull": true
-				},
-				"score": {
-					"name": "score",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": false
-				}
-			},
-			"indexes": {},
-			"foreignKeys": {
-				"scores_id_users_id_fk": {
-					"name": "scores_id_users_id_fk",
-					"tableFrom": "scores",
-					"tableTo": "users",
-					"columnsFrom": ["id"],
-					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
-				}
-			},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {}
-		},
-		"users": {
-			"name": "users",
-			"schema": "",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "serial",
-					"primaryKey": true,
-					"notNull": true
-				},
-				"name": {
-					"name": "name",
-					"type": "varchar(256)",
-					"primaryKey": false,
-					"notNull": false
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "timestamp",
-					"primaryKey": false,
-					"notNull": true,
-					"default": "CURRENT_TIMESTAMP"
-				}
-			},
-			"indexes": {},
-			"foreignKeys": {},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {}
-		}
-	},
-	"enums": {
-		"ibada-types": {
-			"name": "ibada-types",
-			"values": {
-				"PRAYER": "PRAYER",
-				"FASTING": "FASTING",
-				"DJUMA": "DJUMA",
-				"EID_PRAYER": "EID_PRAYER",
-				"QURAN": "QURAN"
-			}
-		}
-	},
-	"schemas": {},
-	"_meta": {
-		"columns": {},
-		"schemas": {},
-		"tables": {}
-	}
+  "id": "719af234-e313-42a2-8777-3e0e38c68fd9",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "ibada_types": {
+      "name": "ibada_types",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "base_reward": {
+          "name": "base_reward",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prayer_type_id": {
+          "name": "prayer_type_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ibada_types_prayer_type_id_prayer_types_id_fk": {
+          "name": "ibada_types_prayer_type_id_prayer_types_id_fk",
+          "tableFrom": "ibada_types",
+          "tableTo": "prayer_types",
+          "columnsFrom": [
+            "prayer_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ibadas": {
+      "name": "ibadas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ibada_type_id": {
+          "name": "ibada_type_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ibadas_ibada_type_id_ibada_types_id_fk": {
+          "name": "ibadas_ibada_type_id_ibada_types_id_fk",
+          "tableFrom": "ibadas",
+          "tableTo": "ibada_types",
+          "columnsFrom": [
+            "ibada_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ibadas_user_id_users_id_fk": {
+          "name": "ibadas_user_id_users_id_fk",
+          "tableFrom": "ibadas",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "prayer_types": {
+      "name": "prayer_types",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "base_reward": {
+          "name": "base_reward",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "moseque_bonus": {
+          "name": "moseque_bonus",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "scores": {
+      "name": "scores",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "score": {
+          "name": "score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "scores_user_id_users_id_fk": {
+          "name": "scores_user_id_users_id_fk",
+          "tableFrom": "scores",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "ibada-types": {
+      "name": "ibada-types",
+      "values": {
+        "PRAYER": "PRAYER",
+        "FASTING": "FASTING",
+        "DJUMA": "DJUMA",
+        "EID_PRAYER": "EID_PRAYER",
+        "QURAN": "QURAN"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
 }
