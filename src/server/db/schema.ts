@@ -1,20 +1,19 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { create } from "domain";
 import { relations, sql } from "drizzle-orm";
 import {
-  PgColumn,
-  PgTableWithColumns,
   index,
   integer,
   pgEnum,
   pgTable,
   pgTableCreator,
   serial,
+  text,
   timestamp,
-  varchar,
+  varchar
 } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -48,7 +47,7 @@ export const ibadaTypesEnum = pgEnum("ibada-types",[
 ])
 
 export const users = pgTable("users",{
-  id: serial("id").primaryKey(),
+  id: integer("id").primaryKey(),
     name: varchar("name", { length: 256 }),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
@@ -61,15 +60,18 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 
+
 export const ibadas = pgTable("ibadas",{
-  id: serial("id").primaryKey(),
+  id: text("id").primaryKey(),
   ibadaType: ibadaTypesEnum('ibada-types').notNull(),
   createdAt: timestamp("created_at")
   .default(sql`CURRENT_TIMESTAMP`)
   .notNull(),
-  userId: serial("user_id").notNull().references(()=> users.id,{ onDelete: "cascade" })
+  userId: integer("user_id").notNull().references(()=> users.id,{ onDelete: "cascade" })
 })
 
+export const createIbadasInputSchema = createInsertSchema(ibadas);
+export const selectIbadasSchema = createSelectSchema(ibadas);
 
 export const ibadaRelations = relations(ibadas, ({one})=>({
   user: one(users,{
@@ -79,11 +81,11 @@ export const ibadaRelations = relations(ibadas, ({one})=>({
 }));
 
 export const userScoreRelations = relations(users,({one})=>({
-  score: one(scores)
+  scores: one(scores)
 }))
 
 export const scores = pgTable("scores",{
-        userId: serial("user_id").notNull().references(()=> users.id,{ onDelete: "cascade" }),
+        userId: integer("user_id").notNull().references(()=> users.id,{ onDelete: "cascade" }),
         score: integer('score')
 
 })
