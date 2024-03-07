@@ -29,6 +29,20 @@
       "when": 1709767891393,
       "tag": "0003_flaky_black_tom",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1709770873621,
+      "tag": "0004_slow_lenny_balinger",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1709770894392,
+      "tag": "0005_green_donald_blake",
+      "breakpoints": true
     }
   ]
 }
