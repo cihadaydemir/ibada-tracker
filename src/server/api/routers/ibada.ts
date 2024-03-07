@@ -1,6 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc"
 import { db } from "@/server/db"
-import { createIbadasInputSchema, ibadas, scores, users } from "@/server/db/schema"
+import { createIbadasInputSchema, ibadaTypes, ibadas, scores, users } from "@/server/db/schema"
 import { newId } from "@/utils"
 import { eq } from "drizzle-orm"
 
@@ -17,10 +17,21 @@ export const ibadaRouter = createTRPCRouter({
 	create: publicProcedure
 		.input(createIbadasInputSchema.omit({ id: true, createdAt: true }))
 		.mutation(async ({ ctx, input }) => {
-			const userScores = ctx.db.query.scores.findFirst({
+			const ibadaType = await ctx.db.query.ibadaTypes.findFirst({
+				where: eq(ibadas.ibadaTypeId, input.ibadaTypeId),
+			})
+			const userScores = await ctx.db.query.scores.findFirst({
 				where: eq(users.id, authUserId),
 			})
 			//TODO update users score
+			if (ibadaType && userScores) {
+				await ctx.db
+					.update(scores)
+					.set({
+						score: userScores?.score + ibadaType?.base_reward,
+					})
+					.where(eq(users.id, authUserId))
+			}
 			return await ctx.db.insert(ibadas).values({
 				...input,
 				id: newId("ibada"),
