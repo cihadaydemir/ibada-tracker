@@ -1,6 +1,7 @@
 import { postRouter } from "@/server/api/routers/post"
 import { createTRPCRouter } from "@/server/api/trpc"
 import { ibadaRouter } from "./routers/ibada"
+import { ibadaTypesRouter } from "./routers/ibadaTypes"
 
 /**
  * This is the primary router for your server.
@@ -10,6 +11,7 @@ import { ibadaRouter } from "./routers/ibada"
 export const appRouter = createTRPCRouter({
 	post: postRouter,
 	ibada: ibadaRouter,
+	ibadaTypes: ibadaTypesRouter,
 })
 
 // export type definition of API
