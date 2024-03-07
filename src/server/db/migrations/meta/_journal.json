@@ -1,48 +1,48 @@
 {
-  "version": "5",
-  "dialect": "pg",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "5",
-      "when": 1709763232895,
-      "tag": "0000_public_magdalene",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1709763321249,
-      "tag": "0001_flashy_ink",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1709763566822,
-      "tag": "0002_futuristic_vanisher",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1709767891393,
-      "tag": "0003_flaky_black_tom",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1709770873621,
-      "tag": "0004_slow_lenny_balinger",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1709770894392,
-      "tag": "0005_green_donald_blake",
-      "breakpoints": true
-    }
-  ]
+	"version": "5",
+	"dialect": "pg",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "5",
+			"when": 1709763232895,
+			"tag": "0000_public_magdalene",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "5",
+			"when": 1709763321249,
+			"tag": "0001_flashy_ink",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "5",
+			"when": 1709763566822,
+			"tag": "0002_futuristic_vanisher",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "5",
+			"when": 1709767891393,
+			"tag": "0003_flaky_black_tom",
+			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "5",
+			"when": 1709770873621,
+			"tag": "0004_slow_lenny_balinger",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "5",
+			"when": 1709770894392,
+			"tag": "0005_green_donald_blake",
+			"breakpoints": true
+		}
+	]
 }

@@ -9,8 +9,9 @@
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "tsx src/server/db/migrate.ts",
+    "format": "bunx @biomejs/biome format ./src -write",
+    "lint": "bunx @biomejs/biome lint •/src",
     "dev": "next dev",
-    "lint": "next lint",
     "start": "next start"
   },
   "dependencies": {
