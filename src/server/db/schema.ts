@@ -27,7 +27,9 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const ibadas = pgTable("ibadas", {
 	id: text("id").primaryKey(),
 	// ibadaType: ibadaTypesEnum("ibada-types").notNull(),
-	ibadaType: text("ibada_type_id").references(() => ibadaTypes.id),
+	ibadaTypeId: text("ibada_type_id")
+		.references(() => ibadaTypes.id)
+		.notNull(),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	userId: integer("user_id")
 		.notNull()
@@ -53,6 +55,7 @@ export const ibadaTypes = pgTable("ibada_types", {
 	base_reward: integer("base_reward").notNull(),
 	mosque_bonus: integer("mosque_bonus"),
 })
+export type IbadaType = typeof ibadaTypes.$inferSelect
 
 export const ibadaRelations = relations(ibadas, ({ one }) => ({
 	user: one(users, {
@@ -60,7 +63,7 @@ export const ibadaRelations = relations(ibadas, ({ one }) => ({
 		references: [users.id],
 	}),
 	ibadaType: one(ibadaTypes, {
-		fields: [ibadas.ibadaType],
+		fields: [ibadas.ibadaTypeId],
 		references: [ibadaTypes.id],
 	}),
 }))
@@ -70,3 +73,4 @@ export const userScoreRelations = relations(users, ({ one }) => ({
 }))
 
 export const ibadaTypesSchema = createSelectSchema(ibadaTypes)
+export type ScoreType = typeof scores.$inferSelect

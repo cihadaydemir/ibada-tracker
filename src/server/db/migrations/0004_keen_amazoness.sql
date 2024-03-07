@@ -1,0 +1,1 @@
+ALTER TABLE "ibadas" ALTER COLUMN "ibada_type_id" SET NOT NULL;
