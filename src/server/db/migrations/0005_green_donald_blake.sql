@@ -1,0 +1,1 @@
+DROP TABLE "ibada-tracker_post";
