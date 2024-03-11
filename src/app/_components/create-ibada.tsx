@@ -1,5 +1,14 @@
 "use client"
 import { Button } from "@/components/ui/button"
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select"
 import { api } from "@/trpc/react"
 import { revalidateTag } from "next/cache"
 
@@ -18,8 +27,28 @@ export const CreateIbada = () => {
 	return (
 		<div className="flex flex-col gap-2">
 			{createIbada.error && <p>Error occured: {createIbada.error.message}</p>}
-
-			<select
+			<Select>
+				<SelectTrigger className="w-[180px]">
+					<SelectValue placeholder="Select a Ibada" />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectGroup>
+						<SelectLabel>Prayers</SelectLabel>
+						{ibadaTypes
+							?.filter((ibada) => ibada.type === "prayer")
+							.map((prayer) => (
+								<SelectItem value={prayer.id}>{prayer.name}</SelectItem>
+							))}
+						<SelectLabel>Other Ibadas</SelectLabel>
+						{ibadaTypes
+							?.filter((ibada) => ibada.type === "other")
+							.map((ibada) => (
+								<SelectItem value={ibada.id}>{ibada.name}</SelectItem>
+							))}
+					</SelectGroup>
+				</SelectContent>
+			</Select>
+			{/* <select
 				defaultValue=""
 				value={selectedIbadaTypeId}
 				onChange={(e) => {
@@ -35,7 +64,7 @@ export const CreateIbada = () => {
 						<p className="text-black ">{ibada.name}</p>
 					</option>
 				))}
-			</select>
+			</select> */}
 			<Button
 				type="button"
 				onClick={(e) => {
