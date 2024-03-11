@@ -53,7 +53,7 @@ export const ibadaTypes = pgTable("ibada_types", {
 	name: text("name").notNull(),
 	type: ibadaTypesEnum("type").notNull(),
 	base_reward: integer("base_reward").notNull(),
-	mosque_bonus: integer("mosque_bonus"),
+	mosque_bonus: integer("mosque_bonus").default(0).notNull(),
 })
 export type IbadaType = typeof ibadaTypes.$inferSelect
 
