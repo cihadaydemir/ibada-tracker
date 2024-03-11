@@ -26,8 +26,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const ibadas = pgTable("ibadas", {
 	id: text("id").primaryKey(),
-	// ibadaType: ibadaTypesEnum("ibada-types").notNull(),
-	ibadaTypeId: text("ibada_type_id")
+	ibadaTypeId: text("ibadaTypes_id")
 		.references(() => ibadaTypes.id)
 		.notNull(),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -49,8 +48,8 @@ export const scores = pgTable("scores", {
 })
 
 export const ibadaTypes = pgTable("ibada_types", {
-	name: text("name").notNull(),
 	id: text("id").primaryKey(),
+	name: text("name").notNull(),
 	type: ibadaTypesEnum("type").notNull(),
 	base_reward: integer("base_reward").notNull(),
 	mosque_bonus: integer("mosque_bonus"),
@@ -62,10 +61,14 @@ export const ibadaRelations = relations(ibadas, ({ one }) => ({
 		fields: [ibadas.userId],
 		references: [users.id],
 	}),
-	ibadaType: one(ibadaTypes, {
-		fields: [ibadas.ibadaTypeId],
-		references: [ibadaTypes.id],
-	}),
+	// ibadaType: one(ibadaTypes, {
+	// 	fields: [ibadas.ibadaTypeId],
+	// 	references: [ibadaTypes.id],
+	// }),
+}))
+
+export const ibadaTypeRelations = relations(ibadaTypes, ({ many }) => ({
+	ibada: many(ibadaTypes),
 }))
 
 export const userScoreRelations = relations(users, ({ one }) => ({
