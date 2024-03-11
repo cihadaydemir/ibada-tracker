@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 
 import { TRPCReactProvider } from "@/trpc/react"
 import { cn } from "@/lib/utils"
+import { ThemeProvider } from "./_components/theme-provider"
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -24,7 +25,9 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={cn("min-h-screen bg-background font-sans antialiased", inter.variable)}>
-				<TRPCReactProvider>{children}</TRPCReactProvider>
+				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+					<TRPCReactProvider>{children}</TRPCReactProvider>
+				</ThemeProvider>
 			</body>
 		</html>
 	)
