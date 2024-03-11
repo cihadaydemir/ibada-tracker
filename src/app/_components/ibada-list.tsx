@@ -1,22 +1,21 @@
-"use client"
+import type { Ibada } from "@/server/db/schema"
+import { api } from "@/trpc/server"
 
-import { api } from "@/trpc/react"
 import React from "react"
+import IbadaItem from "./ibada-item"
 
-// type IbadaListProps = {
-// 	initialValue: (typeof ibadaSchema)[]
-// }
+type IbadaListProps = {
+	initialData: Ibada[]
+}
 
-export const IbadaList = () => {
-	const { data, error, isLoading } = api.ibada.getAll.useQuery(undefined, {
-		// initialData: initialValue,
-	})
+export const IbadaList = async ({ initialData }: IbadaListProps) => {
+	const data = await api.ibada.getAll.query()
 	return (
 		<div>
-			{isLoading && <p>Ibadas loading...</p>}
-			{error && <p>{error.message}</p>}
+			{/* {isLoading && <p>Ibadas loading...</p>}
+			{error && <p>{error.message}</p>} */}
 			{data?.map((ibada) => (
-				<p>{ibada.ibadaType}</p>
+				<IbadaItem ibada={ibada} />
 			))}
 		</div>
 	)
