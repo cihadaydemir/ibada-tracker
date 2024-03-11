@@ -3,6 +3,7 @@ import { db } from "@/server/db"
 import { createIbadasInputSchema, ibadaTypes, ibadas, scores, users } from "@/server/db/schema"
 import { newId } from "@/utils"
 import { eq } from "drizzle-orm"
+import { revalidatePath, revalidateTag } from "next/cache"
 
 const authUserId = 1
 
@@ -18,10 +19,11 @@ export const ibadaRouter = createTRPCRouter({
 		.input(createIbadasInputSchema.omit({ id: true, createdAt: true }))
 		.mutation(async ({ ctx, input }) => {
 			const ibadaType = await ctx.db.query.ibadaTypes.findFirst({
-				where: eq(ibadas.ibadaTypeId, input.ibadaTypeId),
+				// where: eq(ibadaTypes.id, input.ibadaTypeId),
+				where: (table, { and, eq }) => eq(table.id, input.ibadaTypeId),
 			})
 			const userScores = await ctx.db.query.scores.findFirst({
-				where: eq(users.id, authUserId),
+				where: (table, { eq }) => eq(table.userId, authUserId),
 			})
 			//TODO update users score
 			if (ibadaType && userScores) {
@@ -30,7 +32,7 @@ export const ibadaRouter = createTRPCRouter({
 					.set({
 						score: userScores?.score + ibadaType?.base_reward,
 					})
-					.where(eq(users.id, authUserId))
+					.where(eq(scores.userId, authUserId))
 			}
 			return await ctx.db.insert(ibadas).values({
 				...input,
