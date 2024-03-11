@@ -1,5 +1,5 @@
 {
-  "id": "719af234-e313-42a2-8777-3e0e38c68fd9",
+  "id": "69d087a3-d691-429f-864a-07101345d562",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -20,35 +20,27 @@
           "primaryKey": false,
           "notNull": true
         },
+        "type": {
+          "name": "type",
+          "type": "ibada-types",
+          "primaryKey": false,
+          "notNull": true
+        },
         "base_reward": {
           "name": "base_reward",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "prayer_type_id": {
-          "name": "prayer_type_id",
-          "type": "text",
+        "mosque_bonus": {
+          "name": "mosque_bonus",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "ibada_types_prayer_type_id_prayer_types_id_fk": {
-          "name": "ibada_types_prayer_type_id_prayer_types_id_fk",
-          "tableFrom": "ibada_types",
-          "tableTo": "prayer_types",
-          "columnsFrom": [
-            "prayer_type_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -114,40 +106,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "prayer_types": {
-      "name": "prayer_types",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "base_reward": {
-          "name": "base_reward",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "moseque_bonus": {
-          "name": "moseque_bonus",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "scores": {
       "name": "scores",
       "schema": "",
@@ -162,7 +120,7 @@
           "name": "score",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -218,11 +176,8 @@
     "ibada-types": {
       "name": "ibada-types",
       "values": {
-        "PRAYER": "PRAYER",
-        "FASTING": "FASTING",
-        "DJUMA": "DJUMA",
-        "EID_PRAYER": "EID_PRAYER",
-        "QURAN": "QURAN"
+        "prayer": "prayer",
+        "other": "other"
       }
     }
   },
