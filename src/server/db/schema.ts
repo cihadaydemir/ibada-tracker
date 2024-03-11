@@ -2,7 +2,7 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { relations, sql } from "drizzle-orm"
-import { integer, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core"
+import { boolean, integer, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
 /**
@@ -29,6 +29,7 @@ export const ibadas = pgTable("ibadas", {
 	ibadaTypeId: text("ibadaTypes_id")
 		.references(() => ibadaTypes.id)
 		.notNull(),
+	inMosque: boolean("inMosque"),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	userId: integer("user_id")
 		.notNull()
