@@ -43,7 +43,7 @@ export const CreateIbada = () => {
 
 	const onSubmit = (values: z.infer<typeof createIbadasInputSchema>) => {
 		createIbada.mutate({
-			ibadaTypeId: selectedIbadaTypeId,
+			...values,
 			userId: 1,
 		})
 	}
@@ -91,7 +91,7 @@ export const CreateIbada = () => {
 								<FormItem>
 									<label htmlFor="inMosqueCheckbox">
 										<FormControl>
-											<div className="flex flex-row gap-2 items-center cursor-pointer">
+											<div className="flex flex-row gap-2 items-center ">
 												<Checkbox
 													id="inMosqueCheckbox"
 													checked={field.value ?? false}
