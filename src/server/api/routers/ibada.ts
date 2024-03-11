@@ -1,9 +1,8 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc"
 import { db } from "@/server/db"
-import { createIbadasInputSchema, ibadaTypes, ibadas, scores, users } from "@/server/db/schema"
+import { createIbadasInputSchema, ibadas, scores } from "@/server/db/schema"
 import { newId } from "@/utils"
-import { eq } from "drizzle-orm"
-import { revalidatePath, revalidateTag } from "next/cache"
+import { desc, eq } from "drizzle-orm"
 
 const authUserId = 1
 
@@ -12,6 +11,7 @@ export const ibadaRouter = createTRPCRouter({
 		//TODO replace with authenticated user later:
 		return await db.query.ibadas.findMany({
 			where: eq(ibadas.userId, authUserId),
+			orderBy: desc(ibadas.createdAt),
 		})
 	}),
 
