@@ -30,7 +30,9 @@ export const ibadaRouter = createTRPCRouter({
 				await ctx.db
 					.update(scores)
 					.set({
-						score: userScores?.score + ibadaType?.base_reward,
+						score: input.inMosque
+							? userScores.score + ibadaType.base_reward + ibadaType.mosque_bonus
+							: userScores.score + ibadaType.base_reward,
 					})
 					.where(eq(scores.userId, authUserId))
 			}
