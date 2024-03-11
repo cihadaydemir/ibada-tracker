@@ -19,7 +19,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
 
-const getSelectedIbadaById = ({ id, ibadaTypes }: { id: string; ibadaTypes: IbadaType[] }) =>
+const getSelectedIbadaTypeById = ({ id, ibadaTypes }: { id: string; ibadaTypes: IbadaType[] }) =>
 	ibadaTypes.find((ibadaType) => ibadaType.id === id)
 
 export const CreateIbada = () => {
@@ -68,13 +68,17 @@ export const CreateIbada = () => {
 											{ibadaTypes
 												?.filter((ibada) => ibada.type === "prayer")
 												.map((prayer) => (
-													<SelectItem value={prayer.id}>{prayer.name}</SelectItem>
+													<SelectItem key={prayer.id} value={prayer.id}>
+														{`${prayer.name} (+${prayer.base_reward} Points)`}
+													</SelectItem>
 												))}
 											<SelectLabel>Other Ibadas</SelectLabel>
 											{ibadaTypes
 												?.filter((ibada) => ibada.type === "other")
 												.map((ibada) => (
-													<SelectItem value={ibada.id}>{ibada.name}</SelectItem>
+													<SelectItem key={ibada.id} value={ibada.id}>
+														{`${ibada.name} (+${ibada.base_reward} Points)`}
+													</SelectItem>
 												))}
 										</SelectGroup>
 									</SelectContent>
@@ -83,28 +87,34 @@ export const CreateIbada = () => {
 							</FormItem>
 						)}
 					/>
-					{ibadaTypes && getSelectedIbadaById({ id: selectedIbadaTypeId, ibadaTypes })?.type === "prayer" && (
-						<FormField
-							control={form.control}
-							name="inMosque"
-							render={({ field }) => (
-								<FormItem>
-									<label htmlFor="inMosqueCheckbox">
-										<FormControl>
-											<div className="flex flex-row gap-2 items-center ">
-												<Checkbox
-													id="inMosqueCheckbox"
-													checked={field.value ?? false}
-													onCheckedChange={field.onChange}
-												/>
-												<FormDescription>Prayed in mosque</FormDescription>
-											</div>
-										</FormControl>
-									</label>
-								</FormItem>
-							)}
-						/>
-					)}
+					{ibadaTypes &&
+						getSelectedIbadaTypeById({ id: selectedIbadaTypeId, ibadaTypes })?.type === "prayer" && (
+							<FormField
+								control={form.control}
+								name="inMosque"
+								render={({ field }) => (
+									<FormItem>
+										<label htmlFor="inMosqueCheckbox">
+											<FormControl>
+												<div className="flex flex-row gap-2 items-center ">
+													<Checkbox
+														id="inMosqueCheckbox"
+														checked={field.value ?? false}
+														onCheckedChange={field.onChange}
+													/>
+													<FormDescription>{`Prayed in mosque (+${
+														getSelectedIbadaTypeById({
+															id: selectedIbadaTypeId,
+															ibadaTypes,
+														})?.mosque_bonus
+													} Points)`}</FormDescription>
+												</div>
+											</FormControl>
+										</label>
+									</FormItem>
+								)}
+							/>
+						)}
 					<Button type="submit">Create Ibada</Button>
 				</form>
 			</Form>
