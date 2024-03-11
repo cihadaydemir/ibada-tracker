@@ -1,12 +1,18 @@
 "use client"
+import { Button } from "@/components/ui/button"
 import { api } from "@/trpc/react"
+import { revalidateTag } from "next/cache"
 
 import { useState } from "react"
 
 export const CreateIbada = () => {
-	const createIbada = api.ibada.create.useMutation()
-	const { data: ibadaTypes } = api.ibadaTypes.getAll.useQuery()
 	const utils = api.useUtils()
+	const createIbada = api.ibada.create.useMutation({
+		onSuccess(data, variables, context) {
+			utils.scores.getScore.invalidate()
+		},
+	})
+	const { data: ibadaTypes } = api.ibadaTypes.getAll.useQuery()
 
 	const [selectedIbadaTypeId, setSelectedIbadaTypeId] = useState<string>("")
 	return (
@@ -30,25 +36,18 @@ export const CreateIbada = () => {
 					</option>
 				))}
 			</select>
-			<button
+			<Button
 				type="button"
 				onClick={(e) => {
 					e.preventDefault()
-					createIbada.mutate(
-						{
-							ibadaTypeId: selectedIbadaTypeId,
-							userId: 1,
-						},
-						{
-							onSuccess: () => {
-								utils.ibada.invalidate()
-							},
-						},
-					)
+					createIbada.mutate({
+						ibadaTypeId: selectedIbadaTypeId,
+						userId: 1,
+					})
 				}}
 			>
 				Create Ibada
-			</button>
+			</Button>
 		</div>
 	)
 }
