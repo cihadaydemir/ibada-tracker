@@ -11,9 +11,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
-import { type IbadaType, createIbadasInputSchema, ibadas } from "@/server/db/schema"
+import { createIbadasInputSchema, type IbadaType } from "@/server/db/schema"
+import { userAtom } from "@/store"
 import { api } from "@/trpc/react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAtom } from "jotai"
 
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -23,6 +25,7 @@ const getSelectedIbadaTypeById = ({ id, ibadaTypes }: { id: string; ibadaTypes: 
 	ibadaTypes.find((ibadaType) => ibadaType.id === id)
 
 export const CreateIbada = () => {
+	const [user] = useAtom(userAtom)
 	const form = useForm<z.infer<typeof createIbadasInputSchema>>({
 		resolver: zodResolver(createIbadasInputSchema),
 		defaultValues: {
@@ -42,10 +45,12 @@ export const CreateIbada = () => {
 	const [selectedIbadaTypeId, setSelectedIbadaTypeId] = useState<string>("")
 
 	const onSubmit = (values: z.infer<typeof createIbadasInputSchema>) => {
-		createIbada.mutate({
-			...values,
-			userId: 1,
-		})
+		if (user) {
+			createIbada.mutate({
+				...values,
+				userId: user?.id,
+			})
+		}
 	}
 	return (
 		<div className="flex flex-col gap-2">
