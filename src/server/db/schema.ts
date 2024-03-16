@@ -31,7 +31,7 @@ export const ibadas = pgTable("ibadas", {
 		.notNull(),
 	inMosque: boolean("inMosque"),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
-	userId: integer("user_id")
+	userId: text("user_id")
 		.notNull()
 		.references(() => users.id, { onDelete: "cascade" }),
 })
@@ -42,7 +42,7 @@ export const createIbadasInputSchema = createInsertSchema(ibadas)
 export const selectIbadasSchema = createSelectSchema(ibadas)
 
 export const scores = pgTable("scores", {
-	userId: integer("user_id")
+	userId: text("user_id")
 		.notNull()
 		.references(() => users.id, { onDelete: "cascade" }),
 	score: integer("score").notNull(),
