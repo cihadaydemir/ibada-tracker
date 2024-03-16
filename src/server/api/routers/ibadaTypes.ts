@@ -2,8 +2,6 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc"
 import { db } from "@/server/db"
 import { z } from "zod"
 
-const authUserId = 1
-
 export const ibadaTypesRouter = createTRPCRouter({
 	getAll: publicProcedure.query(async ({ input }) => {
 		return await db.query.ibadaTypes.findMany()

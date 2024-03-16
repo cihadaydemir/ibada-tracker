@@ -5,7 +5,7 @@ import { newId } from "@/utils"
 import { desc, eq } from "drizzle-orm"
 
 export const ibadaRouter = createTRPCRouter({
-	getAll: protectedProcedure.query(async ({ input, ctx }) => {
+	getAll: protectedProcedure.query(async ({ ctx }) => {
 		//TODO replace with authenticated user later:
 		return await db.query.ibadas.findMany({
 			where: eq(ibadas.userId, ctx.user.id),
