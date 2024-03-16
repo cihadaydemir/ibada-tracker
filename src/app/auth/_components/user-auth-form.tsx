@@ -1,3 +1,4 @@
+"use client"
 import type * as React from "react"
 
 import { Icons } from "@/app/_components/icons"
@@ -5,22 +6,42 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import { login, signup } from "@/lib/supabase/actions"
+import { supabaseFrontendClient } from "@/lib/supabase/client"
+import { userAtom } from "@/store"
+import { useAtom } from "jotai"
+
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-	// const [isLoading, setIsLoading] = React.useState<boolean>(false)
-	// const [emailInput, setEmailInput] = useState("")
-	// const [passwordInput, setPasswordInput] = useState("")
+	const router = useRouter()
+	const [isLoading, setIsLoading] = useState(false)
+	const [emailInput, setEmailInput] = useState("")
+	const [passwordInput, setPasswordInput] = useState("")
+	const [user, setUser] = useAtom(userAtom)
 
-	// async function onSubmit(event: React.SyntheticEvent) {
-	// 	const { data, error } = await supabase.auth.signUp({
-	// 		email: emailInput,
-	// 		password: passwordInput,
-	// 	})
-	// 	console.log("submit response", { data, error })
-	// }
+	async function handleSignUp() {
+		setIsLoading(true)
+
+		const { data, error } = await supabaseFrontendClient.auth.signUp({
+			email: emailInput,
+			password: passwordInput,
+		})
+		setIsLoading(false)
+
+		return data.user
+	}
+	async function handleLogin() {
+		setIsLoading(true)
+		const { data, error } = await supabaseFrontendClient.auth.signInWithPassword({
+			email: emailInput,
+			password: passwordInput,
+		})
+		setIsLoading(false)
+		return data.user
+	}
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -37,17 +58,48 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 							autoCapitalize="none"
 							autoComplete="email"
 							autoCorrect="off"
+							value={emailInput}
+							onChange={(e) => setEmailInput(e.target.value)}
 						/>
 
 						<Label className="sr-only" htmlFor="password">
 							Password
 						</Label>
-						<Input id="password" type="password" />
+						<Input
+							id="password"
+							type="password"
+							value={passwordInput}
+							onChange={(e) => setPasswordInput(e.target.value)}
+						/>
 					</div>
-					<Button className="bg-secondary text-secondary-foreground" formAction={login}>
+					<Button
+						className="bg-secondary text-secondary-foreground"
+						disabled={isLoading}
+						onClick={async (e) => {
+							e.preventDefault()
+							console.log("form input", { emailInput, passwordInput })
+							const user = await handleLogin()
+							if (user) {
+								setUser(user)
+								router.push("/")
+							}
+						}}
+					>
 						Login with Email
 					</Button>
-					<Button className="bg-primary text-primary-foreground" formAction={signup}>
+					<Button
+						className="bg-primary text-primary-foreground"
+						disabled={isLoading}
+						onClick={async (e) => {
+							e.preventDefault()
+							console.log("form input", { emailInput, passwordInput })
+							const user = await handleSignUp()
+							if (user) {
+								setUser(user)
+								router.push("/")
+							}
+						}}
+					>
 						Sign Up with Email
 					</Button>
 				</div>
