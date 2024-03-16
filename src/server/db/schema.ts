@@ -15,7 +15,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 export const ibadaTypesEnum = pgEnum("ibada-types", ["prayer", "other"])
 
 export const users = pgTable("users", {
-	id: integer("id").primaryKey(),
+	id: text("id").primaryKey(),
 	name: varchar("name", { length: 256 }),
 	createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 })
