@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1709847466063,
-      "tag": "0000_fresh_lily_hollister",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1709847557814,
-      "tag": "0001_curly_genesis",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1709848938617,
-      "tag": "0002_broad_wasp",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1710189903213,
-      "tag": "0003_regular_viper",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1710193299514,
-      "tag": "0004_cute_baron_strucker",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1710555205257,
-      "tag": "0005_romantic_mad_thinker",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1710557399168,
-      "tag": "0006_tidy_dracula",
+      "when": 1710640380908,
+      "tag": "0000_black_kid_colt",
       "breakpoints": true
     }
   ]
