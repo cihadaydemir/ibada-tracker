@@ -15,7 +15,6 @@ export const ibadaRouter = createTRPCRouter({
 
 	create: protectedProcedure.input(createIbadasInputSchema).mutation(async ({ ctx, input }) => {
 		const ibadaType = await ctx.db.query.ibadaTypes.findFirst({
-			// where: eq(ibadaTypes.id, input.ibadaTypeId),
 			where: (table: any, { eq }: any) => eq(table.id, input.ibadaTypeId),
 		})
 		const userScores = await ctx.db.query.scores.findFirst({
@@ -33,6 +32,7 @@ export const ibadaRouter = createTRPCRouter({
 				.where(eq(scores.userId, ctx.user.id))
 		}
 		// TODO fix id type mismatch -> works though.
+
 		return await ctx.db.insert(ibadas).values({
 			id: newId("ibada"),
 			userId: ctx.user.id,

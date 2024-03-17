@@ -48,7 +48,7 @@ export const scores = pgTable("scores", {
 })
 export type Ibada = typeof ibadas.$inferSelect
 
-export const createIbadasInputSchema = createInsertSchema(ibadas).partial().pick({ ibadaTypeId: true, inMosque: true })
+export const createIbadasInputSchema = createInsertSchema(ibadas).pick({ ibadaTypeId: true, inMosque: true })
 export const selectIbadasSchema = createSelectSchema(ibadas)
 export const createUserInputSchema = createInsertSchema(users)
 export type IbadaType = typeof ibadaTypes.$inferSelect
