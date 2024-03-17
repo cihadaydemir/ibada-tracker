@@ -8,15 +8,7 @@ export const scoresRouter = createTRPCRouter({
 		const score = await db.query.scores.findFirst({
 			where: eq(scores.userId, ctx.user.id),
 		})
-		if (!score) {
-			return await db
-				.insert(scores)
-				.values({
-					userId: ctx.user.id,
-					score: 0,
-				})
-				.returning()
-		}
+
 		return score
 	}),
 })
