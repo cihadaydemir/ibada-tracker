@@ -2,6 +2,7 @@ import { unstable_noStore as noStore } from "next/cache"
 
 import { supabaseRSCClient } from "@/lib/supabase/server"
 import { api } from "@/trpc/server"
+import { redirect } from "next/navigation"
 import { CreateIbada } from "./_components/create-ibada"
 import { Header } from "./_components/header"
 import { IbadaList } from "./_components/ibada-list"
@@ -10,20 +11,19 @@ import { Score } from "./_components/score"
 export default async function Home() {
 	noStore()
 
-	const ibadas = await api.ibada.getAll.query()
 	const userScore = await api.scores.getScore.query()
-	const {
-		data: { user },
-	} = await supabaseRSCClient.auth.getUser()
-
+	const user = (await supabaseRSCClient.auth.getSession()).data.session?.user
+	if (!user) {
+		redirect("/auth")
+	}
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+		<main className="flex min-h-screen flex-col items-center justify-center">
 			<div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+				{user.email}
 				<Header />
-				{`User: ${user?.email}`}
 				<Score initialData={userScore!} />
-				<IbadaList initialData={ibadas} />
-				<CreateIbada />
+				<IbadaList />
+				<CreateIbada user={user} />
 			</div>
 		</main>
 	)
