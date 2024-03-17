@@ -29,7 +29,7 @@ export const ibadaTypes = pgTable("ibada_types", {
 })
 
 export const ibadas = pgTable("ibadas", {
-	id: text("id").primaryKey(),
+	id: text("id").primaryKey().notNull(),
 	ibadaTypeId: text("ibadaTypes_id")
 		.references(() => ibadaTypes.id)
 		.notNull(),
