@@ -1,4 +1,4 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr"
+import { type CookieOptions, createServerClient } from "@supabase/ssr"
 import type { EmailOtpType } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
 import { type NextRequest, NextResponse } from "next/server"
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
 			type,
 			token_hash,
 		})
-		console.log("error on route", error?.message)
+
 		if (!error) {
 			return NextResponse.redirect(redirectTo)
 		}
