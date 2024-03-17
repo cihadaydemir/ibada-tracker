@@ -1,12 +1,12 @@
 import { env } from "@/env"
 import { newId } from "@/utils"
 
-import { neon } from "@neondatabase/serverless"
+import { type NeonQueryFunction, neon } from "@neondatabase/serverless"
 import { drizzle } from "drizzle-orm/neon-http"
 import * as schema from "./schema"
 import { ibadaTypes } from "./schema"
 
-const sql = neon(env.DATABASE_URL)
+const sql: NeonQueryFunction<boolean, boolean> = neon(env.DATABASE_URL)
 const db = drizzle(sql, {
 	schema,
 })
