@@ -1,26 +1,30 @@
 import { env } from "@/env"
 import { newId } from "@/utils"
-import { drizzle } from "drizzle-orm/postgres-js"
-import postgres from "postgres"
+
+import { neon } from "@neondatabase/serverless"
+import { drizzle } from "drizzle-orm/neon-http"
+import * as schema from "./schema"
 import { ibadaTypes } from "./schema"
 
-const connection = postgres(env.DATABASE_URL)
-const db = drizzle(connection)
+const sql = neon(env.DATABASE_URL)
+const db = drizzle(sql, {
+	schema,
+})
 
 async function seed() {
 	console.log("🌱 Seeding started!")
-
+	await db.delete(ibadaTypes)
 	await db.insert(ibadaTypes).values([
 		{
 			id: newId("prayer"),
-			name: "Fajr",
+			name: "Sabah",
 			type: "prayer",
 			base_reward: 30,
 			mosque_bonus: 25,
 		},
 		{
 			id: newId("prayer"),
-			name: "Dhuhr",
+			name: "Öğle",
 			type: "prayer",
 			base_reward: 10,
 			mosque_bonus: 25,
@@ -28,21 +32,21 @@ async function seed() {
 		{
 			id: newId("prayer"),
 			type: "prayer",
-			name: "Asr",
+			name: "Ikindi",
 			base_reward: 10,
 			mosque_bonus: 25,
 		},
 		{
 			id: newId("prayer"),
 			type: "prayer",
-			name: "Maghrib",
+			name: "Akșam",
 			base_reward: 10,
 			mosque_bonus: 25,
 		},
 		{
 			id: newId("prayer"),
 			type: "prayer",
-			name: "Isha",
+			name: "Yatsı",
 			base_reward: 10,
 			mosque_bonus: 25,
 		},
@@ -74,13 +78,13 @@ async function seed() {
 		{
 			id: newId("prayer"),
 			type: "other",
-			name: "Fasting",
+			name: "Oruç",
 			base_reward: 50,
 		},
 		{
 			id: newId("prayer"),
 			type: "other",
-			name: "Memorizing",
+			name: "Ezber",
 			base_reward: 50,
 		},
 	])

@@ -1,7 +1,25 @@
-import { migrate } from "drizzle-orm/postgres-js/migrator"
-import { conn, db } from "."
+// src/migrate.ts
 
-// This will run migrations on the database, skipping the ones already applied
-await migrate(db, { migrationsFolder: "src/server/db/migrations/" })
-// Don't forget to close the connection, otherwise the script will hang
-await conn.end()
+import { drizzle } from "drizzle-orm/neon-http"
+import { neon } from "@neondatabase/serverless"
+import { migrate } from "drizzle-orm/neon-http/migrator"
+import { config } from "dotenv"
+
+config({ path: ".env" })
+
+const sql = neon(process.env.DATABASE_URL!)
+const db = drizzle(sql)
+
+const main = async () => {
+	try {
+		await migrate(db, { migrationsFolder: "./src/server/db/migrations" })
+
+		console.log("Migration completed")
+	} catch (error) {
+		console.error("Error during migration:", error)
+
+		process.exit(1)
+	}
+}
+
+main()
