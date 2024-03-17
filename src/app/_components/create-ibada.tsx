@@ -11,21 +11,23 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
-import { createIbadasInputSchema, type IbadaType } from "@/server/db/schema"
-import { userAtom } from "@/store"
+import { type IbadaType, createIbadasInputSchema } from "@/server/db/schema"
 import { api } from "@/trpc/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useAtom } from "jotai"
 
-import { useState } from "react"
+import type { User } from "@supabase/supabase-js"
+
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
 
 const getSelectedIbadaTypeById = ({ id, ibadaTypes }: { id: string; ibadaTypes: IbadaType[] }) =>
 	ibadaTypes.find((ibadaType) => ibadaType.id === id)
 
-export const CreateIbada = () => {
-	const [user] = useAtom(userAtom)
+type CreateIbadaProps = {
+	user: User
+}
+
+export const CreateIbada = ({ user }: CreateIbadaProps) => {
 	const form = useForm<z.infer<typeof createIbadasInputSchema>>({
 		resolver: zodResolver(createIbadasInputSchema),
 		defaultValues: {
@@ -35,20 +37,21 @@ export const CreateIbada = () => {
 
 	const utils = api.useUtils()
 	const createIbada = api.ibada.create.useMutation({
-		onSuccess(data, variables, context) {
-			utils.scores.getScore.invalidate()
+		onSuccess: () => {
+			form.reset({
+				ibadaTypeId: "",
+				inMosque: false,
+			})
 			utils.ibada.getAll.invalidate()
+			utils.scores.getScore.invalidate()
 		},
 	})
 	const { data: ibadaTypes } = api.ibadaTypes.getAll.useQuery()
-
-	const [selectedIbadaTypeId, setSelectedIbadaTypeId] = useState<string>("")
 
 	const onSubmit = (values: z.infer<typeof createIbadasInputSchema>) => {
 		if (user) {
 			createIbada.mutate({
 				...values,
-				userId: user?.id,
 			})
 		}
 	}
@@ -60,10 +63,10 @@ export const CreateIbada = () => {
 					<FormField
 						control={form.control}
 						name="ibadaTypeId"
-						render={(field) => (
+						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Ibada Type</FormLabel>
-								<Select onValueChange={(val) => setSelectedIbadaTypeId(val)}>
+								<Select value={field.value} onValueChange={(val) => field.onChange(val)}>
 									<SelectTrigger className="w-[180px]">
 										<SelectValue placeholder="Select a Ibada" />
 									</SelectTrigger>
@@ -93,7 +96,9 @@ export const CreateIbada = () => {
 						)}
 					/>
 					{ibadaTypes &&
-						getSelectedIbadaTypeById({ id: selectedIbadaTypeId, ibadaTypes })?.type === "prayer" && (
+						form.getValues("ibadaTypeId") &&
+						getSelectedIbadaTypeById({ id: form.getValues("ibadaTypeId")!, ibadaTypes })?.type ===
+							"prayer" && (
 							<FormField
 								control={form.control}
 								name="inMosque"
@@ -109,7 +114,7 @@ export const CreateIbada = () => {
 													/>
 													<FormDescription>{`Prayed in mosque (+${
 														getSelectedIbadaTypeById({
-															id: selectedIbadaTypeId,
+															id: form.getValues("ibadaTypeId")!,
 															ibadaTypes,
 														})?.mosque_bonus
 													} Points)`}</FormDescription>
