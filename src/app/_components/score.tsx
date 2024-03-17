@@ -10,5 +10,5 @@ type ScoreProps = {
 
 export const Score = ({ initialData }: ScoreProps) => {
 	const { data } = api.scores.getScore.useQuery(undefined, { initialData })
-	return <div className="py-2 px-4 rounded bg-white/50  text-black">Score: {data?.score}</div>
+	return <div className="py-2 px-4 rounded bg-accent text-primary-foreground">Score: {data?.score ?? 0}</div>
 }

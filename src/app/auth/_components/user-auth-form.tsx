@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 import { supabaseFrontendClient } from "@/lib/supabase/client"
-import { userAtom } from "@/store"
-import { useAtom } from "jotai"
 
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -20,7 +18,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 	const [isLoading, setIsLoading] = useState(false)
 	const [emailInput, setEmailInput] = useState("")
 	const [passwordInput, setPasswordInput] = useState("")
-	const [user, setUser] = useAtom(userAtom)
 
 	async function handleSignUp() {
 		setIsLoading(true)
@@ -80,7 +77,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 							console.log("form input", { emailInput, passwordInput })
 							const user = await handleLogin()
 							if (user) {
-								setUser(user)
 								router.push("/")
 							}
 						}}
@@ -95,7 +91,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 							console.log("form input", { emailInput, passwordInput })
 							const user = await handleSignUp()
 							if (user) {
-								setUser(user)
 								router.push("/")
 							}
 						}}
