@@ -1,1 +1,0 @@
-ALTER TABLE "ibadas" ADD COLUMN "inMosque" boolean;

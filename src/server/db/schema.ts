@@ -20,9 +20,13 @@ export const users = pgTable("users", {
 	createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 })
 
-export const usersRelations = relations(users, ({ many }) => ({
-	ibada: many(ibadas),
-}))
+export const ibadaTypes = pgTable("ibada_types", {
+	id: text("id").primaryKey(),
+	name: text("name").notNull(),
+	type: ibadaTypesEnum("type").notNull(),
+	base_reward: integer("base_reward").notNull(),
+	mosque_bonus: integer("mosque_bonus").default(0).notNull(),
+})
 
 export const ibadas = pgTable("ibadas", {
 	id: text("id").primaryKey(),
@@ -36,25 +40,17 @@ export const ibadas = pgTable("ibadas", {
 		.references(() => users.id, { onDelete: "cascade" }),
 })
 
-export type Ibada = typeof ibadas.$inferSelect
-
-export const createIbadasInputSchema = createInsertSchema(ibadas)
-export const selectIbadasSchema = createSelectSchema(ibadas)
-
 export const scores = pgTable("scores", {
 	userId: text("user_id")
 		.notNull()
 		.references(() => users.id, { onDelete: "cascade" }),
 	score: integer("score").notNull(),
 })
+export type Ibada = typeof ibadas.$inferSelect
 
-export const ibadaTypes = pgTable("ibada_types", {
-	id: text("id").primaryKey(),
-	name: text("name").notNull(),
-	type: ibadaTypesEnum("type").notNull(),
-	base_reward: integer("base_reward").notNull(),
-	mosque_bonus: integer("mosque_bonus").default(0).notNull(),
-})
+export const createIbadasInputSchema = createInsertSchema(ibadas).partial().pick({ ibadaTypeId: true, inMosque: true })
+export const selectIbadasSchema = createSelectSchema(ibadas)
+export const createUserInputSchema = createInsertSchema(users)
 export type IbadaType = typeof ibadaTypes.$inferSelect
 
 export const ibadaRelations = relations(ibadas, ({ one }) => ({
@@ -62,19 +58,16 @@ export const ibadaRelations = relations(ibadas, ({ one }) => ({
 		fields: [ibadas.userId],
 		references: [users.id],
 	}),
-	// ibadaType: one(ibadaTypes, {
-	// 	fields: [ibadas.ibadaTypeId],
-	// 	references: [ibadaTypes.id],
-	// }),
 }))
 
 export const ibadaTypeRelations = relations(ibadaTypes, ({ many }) => ({
 	ibada: many(ibadaTypes),
 }))
 
-export const userScoreRelations = relations(users, ({ one }) => ({
-	scores: one(scores),
-}))
-
 export const ibadaTypesSchema = createSelectSchema(ibadaTypes)
 export type ScoreType = typeof scores.$inferSelect
+
+export const usersRelations = relations(users, ({ many, one }) => ({
+	ibada: many(ibadas),
+	score: one(scores),
+}))
