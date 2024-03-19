@@ -1,55 +1,28 @@
+"use server"
 import "server-only"
 
 import { TRPCClientError, createTRPCProxyClient, loggerLink } from "@trpc/client"
 import { callProcedure } from "@trpc/server"
 import { observable } from "@trpc/server/observable"
 import type { TRPCErrorResponse } from "@trpc/server/rpc"
-import { cookies, headers } from "next/headers"
 import { cache } from "react"
 
 import { type AppRouter, appRouter } from "@/server/api/root"
-import { createTRPCContext } from "@/server/api/trpc"
-import { type CookieOptions, createServerClient } from "@supabase/ssr"
+
+import { createContext } from "@/server/api/context"
 import { transformer } from "./shared"
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
  * handling a tRPC call from a React Server Component.
  */
-const createContext = cache(() => {
-	const heads = new Headers(headers())
-	heads.set("x-trpc-source", "rsc")
-	const cookieStore = cookies()
-	const supabase = createServerClient(
-		process.env.NEXT_PUBLIC_SUPABASE_URL!,
-		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-		{
-			cookies: {
-				get(name: string) {
-					return cookieStore.get(name)?.value
-				},
-				set(name: string, value: string, options: CookieOptions) {
-					cookieStore.set({
-						name,
-						value,
-						...options,
-					})
-				},
-				remove(name: string, options: CookieOptions) {
-					cookieStore.set({
-						name,
-						value: "",
-						...options,
-					})
-				},
-			},
-		},
-	)
+const createTrpcProxyContext = cache(async () => {
+	// const heads = new Headers(headers())
+	// heads.set("x-trpc-source", "rsc")
+	// const client = getSupabaseServerClient()
+	// const session = await requireSession(client)
 
-	return createTRPCContext({
-		supabase,
-		headers: heads,
-	})
+	return await createContext()
 })
 
 export const api = createTRPCProxyClient<AppRouter>({
