@@ -8,22 +8,22 @@ import { cache } from "react"
 
 import { type AppRouter, appRouter } from "@/server/api/root"
 
-import { createContext } from "@/server/api/context"
+import { createTRPCContext } from "@/server/api/trpc"
+import { headers } from "next/headers"
 import { transformer } from "./shared"
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
  * handling a tRPC call from a React Server Component.
  */
-const createTrpcProxyContext = cache(async () => {
-	// const heads = new Headers(headers())
-	// heads.set("x-trpc-source", "rsc")
-	// const client = getSupabaseServerClient()
-	// const session = await requireSession(client)
+const createContext = cache(() => {
+	const heads = new Headers(headers())
+	heads.set("x-trpc-source", "rsc")
 
-	return await createContext()
+	return createTRPCContext({
+		headers: heads,
+	})
 })
-
 export const api = createTRPCProxyClient<AppRouter>({
 	transformer,
 	links: [
