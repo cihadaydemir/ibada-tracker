@@ -10,8 +10,8 @@ import { TRPCError, initTRPC } from "@trpc/server"
 import superjson from "superjson"
 import { ZodError } from "zod"
 
-import { db } from "@/server/db"
 import type { SupabaseClient } from "@supabase/supabase-js"
+import { createContext, type Context } from "./context"
 
 /**
  * 1. CONTEXT
@@ -26,23 +26,24 @@ import type { SupabaseClient } from "@supabase/supabase-js"
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers; supabase: SupabaseClient }) => {
-	const supabase = opts.supabase
+	// const supabase = opts.supabase
 
-	// React Native will pass their token through headers,
-	// browsers will have the session cookie set
-	const token = opts.headers.get("authorization")
+	// // React Native will pass their token through headers,
+	// // browsers will have the session cookie set
+	// const token = opts.headers.get("authorization")
 
-	const user = token ? await supabase.auth.getUser(token) : await supabase.auth.getUser()
-	if (!user.data.user) {
-		throw new TRPCError({ code: "UNAUTHORIZED" })
-	}
-	const source = opts.headers.get("x-trpc-source") ?? "unknown"
-	console.log(">>> tRPC Request from", source, "by", user?.data.user?.email)
+	// const user = token ? await supabase.auth.getUser(token) : await supabase.auth.getUser()
+	// if (!user.data.user) {
+	// 	throw new TRPCError({ code: "UNAUTHORIZED" })
+	// }
+	// const source = opts.headers.get("x-trpc-source") ?? "unknown"
+	// console.log(">>> tRPC Request from", source, "by", user?.data.user?.email)
 
-	return {
-		user: user.data.user,
-		db,
-	}
+	// return {
+	// 	user: user.data.user,
+	// 	db,
+	// }
+	return await createContext()
 }
 
 /**
@@ -52,7 +53,7 @@ export const createTRPCContext = async (opts: { headers: Headers; supabase: Supa
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-const t = initTRPC.context<typeof createTRPCContext>().create({
+const t = initTRPC.context<Context>().create({
 	transformer: superjson,
 	errorFormatter({ shape, error }) {
 		return {
@@ -93,13 +94,13 @@ export const publicProcedure = t.procedure
  * procedure
  */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-	if (!ctx.user?.id) {
+	if (!ctx.auth.user?.id) {
 		throw new TRPCError({ code: "UNAUTHORIZED" })
 	}
 	return next({
 		ctx: {
 			// infers the `user` as non-nullable
-			user: ctx.user,
+			user: ctx.auth.user,
 		},
 	})
 })
