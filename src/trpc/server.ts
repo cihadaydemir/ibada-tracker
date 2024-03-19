@@ -1,4 +1,3 @@
-"use server"
 import "server-only"
 
 import { TRPCClientError, createTRPCProxyClient, loggerLink } from "@trpc/client"
