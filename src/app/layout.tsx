@@ -2,11 +2,12 @@ import "@/styles/globals.css"
 
 import { Inter } from "next/font/google"
 
-import { supabaseRSCClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server"
 import { cn } from "@/lib/utils"
 import { TRPCReactProvider } from "@/trpc/react"
 import { api } from "@/trpc/server"
 import { ThemeProvider } from "./_components/theme-provider"
+import { cookies } from "next/headers"
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -24,7 +25,8 @@ export default async function RootLayout({
 }: {
 	children: React.ReactNode
 }) {
-	const user = (await supabaseRSCClient.auth.getSession()).data.session?.user
+	const supabase = await createClient(cookies())
+	const user = (await supabase.auth.getSession()).data.session?.user
 	if (user) {
 		await api.user.findOrCreateUser.mutate()
 	}

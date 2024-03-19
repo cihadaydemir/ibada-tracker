@@ -1,8 +1,8 @@
 "use server"
 import { revalidatePath } from "next/cache"
-import { headers } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
-import { supabaseRSCClient } from "./server"
+import { createClient } from "./server"
 
 export async function login(formData: FormData) {
 	// type-casting here for convenience
@@ -11,8 +11,8 @@ export async function login(formData: FormData) {
 		email: formData.get("email") as string,
 		password: formData.get("password") as string,
 	}
-
-	const { error } = await supabaseRSCClient.auth.signInWithPassword(data)
+	const supabase = await createClient(cookies())
+	const { error } = await supabase.auth.signInWithPassword(data)
 
 	if (error) {
 		redirect("/error")
@@ -30,8 +30,8 @@ export async function signup(formData: FormData) {
 		email: formData.get("email") as string,
 		password: formData.get("password") as string,
 	}
-
-	const { error } = await supabaseRSCClient.auth.signUp({
+	const supabase = await createClient(cookies())
+	const { error } = await supabase.auth.signUp({
 		...data,
 		options: { emailRedirectTo: `${header.get("host")}/auth/callback` },
 	})
