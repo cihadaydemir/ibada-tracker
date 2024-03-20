@@ -19,12 +19,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 	const [emailInput, setEmailInput] = useState("")
 	const [passwordInput, setPasswordInput] = useState("")
 
+	console.log("path", path)
 	async function handleSignUp() {
 		setIsLoading(true)
 
 		const { data, error } = await supabaseFrontendClient.auth.signUp({
 			email: emailInput,
 			password: passwordInput,
+			options: {
+				emailRedirectTo: [window.location.origin, "/auth/callback"].join(""),
+			},
 		})
 		setIsLoading(false)
 
