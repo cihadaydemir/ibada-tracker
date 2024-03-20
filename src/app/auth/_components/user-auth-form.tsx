@@ -17,10 +17,11 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 	const { toast } = useToast()
 	const router = useRouter()
+
 	const [isLoading, setIsLoading] = useState(false)
 	const [emailInput, setEmailInput] = useState("")
 	const [passwordInput, setPasswordInput] = useState("")
-	console.log("path", [window.location.origin, "/auth/confirm"].join(""))
+
 	async function handleSignUp() {
 		setIsLoading(true)
 
@@ -90,7 +91,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 						disabled={isLoading}
 						onClick={async (e) => {
 							e.preventDefault()
-							console.log("form input", { emailInput, passwordInput })
+
 							const user = await handleLogin()
 							if (user) {
 								router.push("/")
@@ -104,7 +105,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 						disabled={isLoading}
 						onClick={async (e) => {
 							e.preventDefault()
-							console.log("form input", { emailInput, passwordInput })
+
 							const user = await handleSignUp()
 							if (user) {
 								router.push("/")
