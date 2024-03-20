@@ -19,7 +19,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 	const [emailInput, setEmailInput] = useState("")
 	const [passwordInput, setPasswordInput] = useState("")
 
-	console.log("path", path)
 	async function handleSignUp() {
 		setIsLoading(true)
 
