@@ -18,7 +18,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 	const [isLoading, setIsLoading] = useState(false)
 	const [emailInput, setEmailInput] = useState("")
 	const [passwordInput, setPasswordInput] = useState("")
-
+	console.log("path", [window.location.origin, "/auth/callback"].join(""))
 	async function handleSignUp() {
 		setIsLoading(true)
 
