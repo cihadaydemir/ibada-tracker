@@ -11,6 +11,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
+import { useToast } from "@/components/ui/use-toast"
 import { type IbadaType, createIbadasInputSchema } from "@/server/db/schema"
 import { api } from "@/trpc/react"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -28,6 +29,7 @@ type CreateIbadaProps = {
 }
 
 export const CreateIbada = ({ user }: CreateIbadaProps) => {
+	const { toast } = useToast()
 	const form = useForm<z.infer<typeof createIbadasInputSchema>>({
 		resolver: zodResolver(createIbadasInputSchema),
 		defaultValues: {
@@ -38,6 +40,9 @@ export const CreateIbada = ({ user }: CreateIbadaProps) => {
 	const utils = api.useUtils()
 	const createIbada = api.ibada.create.useMutation({
 		onSuccess: () => {
+			toast({
+				title: "Ibada created ✅",
+			})
 			form.reset({
 				ibadaTypeId: "",
 				inMosque: false,
