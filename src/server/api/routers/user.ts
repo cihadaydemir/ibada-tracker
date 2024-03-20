@@ -4,7 +4,7 @@ import { scores, users } from "@/server/db/schema"
 export const userRouter = createTRPCRouter({
 	findOrCreateUser: protectedProcedure.mutation(async ({ ctx }) => {
 		const tableUser = await ctx.db.query.users.findFirst({
-			where: (table, { eq }) => eq(users.id, table.id),
+			where: (table, { eq }) => eq(table.id, ctx.user.id),
 		})
 		if (!tableUser) {
 			const newUser = (
