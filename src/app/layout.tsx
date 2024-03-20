@@ -8,6 +8,7 @@ import { TRPCReactProvider } from "@/trpc/react"
 import { api } from "@/trpc/server"
 import { ThemeProvider } from "./_components/theme-provider"
 import { cookies } from "next/headers"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -35,7 +36,10 @@ export default async function RootLayout({
 		<html lang="en" className="h-full w-full bg-background">
 			<body className={cn("h-full bg-background font-sans antialiased", inter.variable)}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-					<TRPCReactProvider>{children}</TRPCReactProvider>
+					<TRPCReactProvider>
+						{children}
+						<Toaster />
+					</TRPCReactProvider>
 				</ThemeProvider>
 			</body>
 		</html>
