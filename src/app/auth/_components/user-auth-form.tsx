@@ -8,12 +8,14 @@ import { Label } from "@/components/ui/label"
 
 import { supabaseFrontendClient } from "@/lib/supabase/client"
 
+import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+	const { toast } = useToast()
 	const router = useRouter()
 	const [isLoading, setIsLoading] = useState(false)
 	const [emailInput, setEmailInput] = useState("")
@@ -30,7 +32,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 			},
 		})
 		setIsLoading(false)
-
+		if (!error) {
+			toast({
+				title: "Successfully registered! ✅",
+				description: "You can log in with your credentials.",
+			})
+		} else {
+			toast({
+				title: "Registration failed! ❌",
+				description: "Something went rong! Please try again.",
+				variant: "destructive",
+			})
+		}
 		return data.user
 	}
 	async function handleLogin() {
