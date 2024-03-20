@@ -9,6 +9,7 @@ import { api } from "@/trpc/server"
 import { ThemeProvider } from "./_components/theme-provider"
 import { cookies } from "next/headers"
 import { Toaster } from "@/components/ui/toaster"
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -40,6 +41,7 @@ export default async function RootLayout({
 					<TRPCReactProvider>
 						{children}
 						<Toaster />
+						<Analytics />
 					</TRPCReactProvider>
 				</ThemeProvider>
 			</body>
