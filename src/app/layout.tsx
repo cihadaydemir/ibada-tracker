@@ -28,7 +28,7 @@ export default async function RootLayout({
 }) {
 	const supabase = await createClient(cookies())
 	const user = (await supabase.auth.getSession()).data.session?.user
-	console.log("user in layout", user)
+
 	if (user) {
 		await api.user.findOrCreateUser.mutate()
 	}
