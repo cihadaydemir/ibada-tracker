@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { supabaseFrontendClient } from "@/lib/supabase/client"
 
 import { useToast } from "@/components/ui/use-toast"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { useState } from "react"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -33,11 +33,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 			},
 		})
 		setIsLoading(false)
+
 		if (!error) {
-			toast({
-				title: "Successfully registered! ✅",
-				description: "You can log in with your credentials.",
-			})
+			router.push("/auth/confirmation")
 		} else {
 			toast({
 				title: "Registration failed! ❌",
@@ -53,6 +51,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 			email: emailInput,
 			password: passwordInput,
 		})
+		if (data && !error) {
+			router.push("/")
+		}
 		setIsLoading(false)
 		return data.user
 	}
@@ -91,11 +92,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 						disabled={isLoading}
 						onClick={async (e) => {
 							e.preventDefault()
-
-							const user = await handleLogin()
-							if (user) {
-								router.push("/")
-							}
+							await handleLogin()
 						}}
 					>
 						Login with Email
@@ -105,11 +102,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 						disabled={isLoading}
 						onClick={async (e) => {
 							e.preventDefault()
-
-							const user = await handleSignUp()
-							if (user) {
-								router.push("/")
-							}
+							await handleSignUp()
 						}}
 					>
 						Sign Up with Email
