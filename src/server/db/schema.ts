@@ -16,7 +16,9 @@ export const ibadaTypesEnum = pgEnum("ibada-types", ["prayer", "other"])
 
 export const users = pgTable("users", {
 	id: text("id").primaryKey(),
-	name: varchar("name", { length: 256 }),
+	email: varchar("email", { length: 256 }),
+	firstname: varchar("firstname", { length: 256 }),
+	lastname: varchar("lastname", { length: 256 }),
 	createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 })
 
