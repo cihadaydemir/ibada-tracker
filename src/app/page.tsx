@@ -8,6 +8,7 @@ import { IbadaList } from "./_components/ibada-list"
 import { Score } from "./_components/score"
 import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
+import { SelectionList } from "./auth/_components/SelectionList"
 
 export default async function Home() {
 	noStore()
@@ -26,6 +27,7 @@ export default async function Home() {
 				<Header />
 				<Score initialData={userScore!} />
 				<IbadaList />
+				<SelectionList />
 				<CreateIbada user={user} />
 			</div>
 		</main>
