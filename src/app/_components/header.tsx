@@ -13,7 +13,7 @@ export const Header = () => {
 				onClick={async (e) => {
 					e.preventDefault()
 					await supabaseFrontendClient.auth.signOut()
-					router.refresh()
+					router.push("/auth")
 				}}
 			>
 				Log out
