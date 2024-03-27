@@ -1,5 +1,3 @@
-import { MailOpen } from "lucide-react"
-
 export default function ConfirmationPage() {
 	return (
 		<div className="container gap-5 text-lg flex flex-row items-center justify-center mt-10">
