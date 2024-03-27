@@ -2,7 +2,7 @@
 import type * as React from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SignUpForm } from "./RegisterForm"
+import { SignUpForm } from "./SignUpForm"
 import { LoginForm } from "./SignInForm"
 
 export function UserAuthForm() {
