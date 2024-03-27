@@ -12,7 +12,9 @@ export const userRouter = createTRPCRouter({
 					.insert(users)
 					.values({
 						id: ctx.user.id,
-						name: ctx.user.email,
+						email: ctx.user.email!,
+						firstname: ctx.user.user_metadata.firstname,
+						lastname: ctx.user.user_metadata.lastname,
 					})
 					.returning()
 			)[0]
